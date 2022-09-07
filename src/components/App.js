@@ -27,36 +27,43 @@ function App() {
     //     popup.classList.add('popup_opened')
     //   }
 
-    const { isEditAvatarPopupOpen, handleEditAvatarClick } = React.useState(true)
-    const { isEditProfilePopupOpen, handleEditProfileClick } = React.useState(false)
-    const { isAddPlacePopupOpen, handleAddPlaceClick } = React.useState(false)
+    const { isEditAvatarPopupOpen, setIsEditAvatarPopupOpen } = React.useState(true)
+    // const { isEditProfilePopupOpen, handleEditProfileClick } = React.useState(true)
+    // const { isAddPlacePopupOpen, handleAddPlaceClick } = React.useState(true)
     const [selectedCard, setSelectedCard] = React.useState({});
     const [openPopupName, setOpenPopupName] = React.useState('');
 
+    function handleEditAvatarClick () {
+        console.log ('изменение статуса попапа аватара')
+        setIsEditAvatarPopupOpen(false)
+    }
+    
+    
     const onCardClick = (card) => {
         setSelectedCard(card);
         setOpenPopupName('preview');
     };
 
-    const onClosePopup = () => {
+    const closeAllPopup = () => {
         setOpenPopupName('');
-    };
+        setIsEditAvatarPopupOpen('');
+      };
 
     return (
         <>
             <Header />
             <Main
-
+                
                 onCardClick={onCardClick}
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
+                // onEditProfile={handleEditProfileClick}
+                // onAddPlace={handleAddPlaceClick}
                 onEditAvatar={handleEditAvatarClick}
             />
             <PopupWithForm
                 name="profile"
                 title="Редактировать профиль"
                 textsubmit="Сохранить"
-                isOpen={isEditProfilePopupOpen}
+                // isOpen={isEditProfilePopupOpen}
                 children={
                     <fieldset className="popup__fields">
                         <label className="name">
@@ -79,7 +86,7 @@ function App() {
                 name="place"
                 title="Новое место"
                 textsubmit="Создать"
-                isOpen={isAddPlacePopupOpen}
+                // isOpen={isAddPlacePopupOpen}
                 children={
                     <fieldset className="popup__fields">
                         <label className="place">
@@ -97,13 +104,13 @@ function App() {
                 }
             />
 
-            <ImagePopup
-                card={selectedCard}
-                isOpen={openPopupName === 'preview'}
-                onClose={() => {
-                    onClosePopup();
-                    setSelectedCard({});
-                }}
+            <ImagePopup 
+            card ={selectedCard}
+            isOpen={openPopupName === 'preview'}
+            onClose={()=>{
+                closeAllPopup();
+                setSelectedCard({});
+              }}
             />
 
 
