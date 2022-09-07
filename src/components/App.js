@@ -27,15 +27,14 @@ function App() {
     //     popup.classList.add('popup_opened')
     //   }
 
-    const { isEditAvatarPopupOpen, setIsEditAvatarPopupOpen } = React.useState(true)
-    // const { isEditProfilePopupOpen, handleEditProfileClick } = React.useState(true)
-    // const { isAddPlacePopupOpen, handleAddPlaceClick } = React.useState(true)
+    const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false);
+
     const [selectedCard, setSelectedCard] = React.useState({});
     const [openPopupName, setOpenPopupName] = React.useState('');
 
     function handleEditAvatarClick () {
         console.log ('изменение статуса попапа аватара')
-        setIsEditAvatarPopupOpen(false)
+        setIsEditAvatarPopupOpen('popup_opened')
     }
     
     
@@ -46,7 +45,7 @@ function App() {
 
     const closeAllPopup = () => {
         setOpenPopupName('');
-        setIsEditAvatarPopupOpen('');
+        
       };
 
     return (
@@ -55,8 +54,7 @@ function App() {
             <Main
                 
                 onCardClick={onCardClick}
-                // onEditProfile={handleEditProfileClick}
-                // onAddPlace={handleAddPlaceClick}
+
                 onEditAvatar={handleEditAvatarClick}
             />
             <PopupWithForm
@@ -117,8 +115,8 @@ function App() {
             <PopupWithForm
                 name="delete"
                 title="Вы уверены?"
-                onClick={() => { }}
                 textsubmit="Да"
+            
             />
 
 

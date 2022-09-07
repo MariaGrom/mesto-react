@@ -4,7 +4,7 @@ import api from '../utils/api';
 import Card from './Card'
 
 function Main(props){
-  const {onEditProfile, onAddPlace, onEditAvatar, onCardClick}=props
+  const {onEditAvatar, onCardClick}=props
 
   // Переменная состояния имя пользователя
   const [userName, setUserName] = React.useState('Жак Ив Кусто');
@@ -40,18 +40,18 @@ function Main(props){
     <main>
       <section className="profile">
         <div className="profile__info">
-          <div className="profile__photo">
-            <img className="profile__avatar" src={userAvatar} alt="Аватар" onClick={onEditAvatar} />
+          <div className="profile__photo" onClick={onEditAvatar}>
+            <img className="profile__avatar" src={userAvatar} alt="Аватар"  />
           </div>
           <div className="profile__user">
             <div className="profile__name">
               <h1 className="profile__title">{userName}</h1>
-              <button className="profile__edit-button" onClick={onEditProfile}></button>
+              <button className="profile__edit-button"></button>
             </div>
             <p className="profile__subtitle">{userDescription}</p>
           </div>
         </div>
-        <button className="profile__add-button" onClick={onAddPlace}></button>
+        <button className="profile__add-button"></button>
       </section>
       <section className="elements">
         <ul className="elements__items">
