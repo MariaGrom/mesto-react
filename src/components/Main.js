@@ -4,13 +4,11 @@ import api from '../utils/api';
 import Card from './Card'
 
 function Main(props){
-  const {onEditAvatar, onCardClick}=props
+  const {onEditAvatar, onEditProfile, onAddPlace, onCardClick}=props
 
-  // Переменная состояния имя пользователя
+  // Задаем переменные состояния пользователя 
   const [userName, setUserName] = React.useState('Жак Ив Кусто');
-  // Переменная состояния about пользователя
-  const [userDescription, setUserDescription] = React.useState('Исследователь океана');
-  // Переменная состояния аватара пользователя  
+  const [userDescription, setUserDescription] = React.useState('Исследователь океана'); 
   const [userAvatar, setUserAvatar] = React.useState(avatar);
   // Переменная состояния карточек
   const [cards, setCards] = React.useState([]);
@@ -46,12 +44,12 @@ function Main(props){
           <div className="profile__user">
             <div className="profile__name">
               <h1 className="profile__title">{userName}</h1>
-              <button className="profile__edit-button"></button>
+              <button className="profile__edit-button" onClick={onEditProfile}></button>
             </div>
             <p className="profile__subtitle">{userDescription}</p>
           </div>
         </div>
-        <button className="profile__add-button"></button>
+        <button className="profile__add-button" onClick={onAddPlace}></button>
       </section>
       <section className="elements">
         <ul className="elements__items">

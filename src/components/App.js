@@ -27,16 +27,25 @@ function App() {
     //     popup.classList.add('popup_opened')
     //   }
 
-    const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false);
+    // Переменные состояния попапов
+    const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState('');
+    const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState('');
+    const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen] =React.useState('');
 
     const [selectedCard, setSelectedCard] = React.useState({});
     const [openPopupName, setOpenPopupName] = React.useState('');
 
     function handleEditAvatarClick () {
-        console.log ('изменение статуса попапа аватара')
         setIsEditAvatarPopupOpen('popup_opened')
     }
     
+    function handleEditProfileClick() {
+        setIsEditProfilePopupOpen('popup_opened')
+    }
+
+    function  handleAddPlaceClick() {
+        setIsAddPlacePopupOpen('popup_opened')
+    }
     
     const onCardClick = (card) => {
         setSelectedCard(card);
@@ -45,6 +54,9 @@ function App() {
 
     const closeAllPopup = () => {
         setOpenPopupName('');
+        setIsEditAvatarPopupOpen('');
+        setIsEditProfilePopupOpen('');
+        setIsAddPlacePopupOpen('');
         
       };
 
@@ -54,14 +66,18 @@ function App() {
             <Main
                 
                 onCardClick={onCardClick}
-
                 onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
             />
             <PopupWithForm
                 name="profile"
                 title="Редактировать профиль"
                 textsubmit="Сохранить"
-                // isOpen={isEditProfilePopupOpen}
+                isOpen={isEditProfilePopupOpen}
+                onClose={()=>{
+                    closeAllPopup()
+                }}
                 children={
                     <fieldset className="popup__fields">
                         <label className="name">
@@ -84,7 +100,10 @@ function App() {
                 name="place"
                 title="Новое место"
                 textsubmit="Создать"
-                // isOpen={isAddPlacePopupOpen}
+                isOpen={isAddPlacePopupOpen}
+                onClose={()=>{
+                    closeAllPopup()
+                }}
                 children={
                     <fieldset className="popup__fields">
                         <label className="place">
@@ -116,7 +135,6 @@ function App() {
                 name="delete"
                 title="Вы уверены?"
                 textsubmit="Да"
-            
             />
 
 
@@ -125,6 +143,9 @@ function App() {
                 title="Обновить аватар"
                 textsubmit="Сохранить"
                 isOpen={isEditAvatarPopupOpen}
+                onClose={()=>{
+                    closeAllPopup()
+                }}
                 children={
                     <fieldset className="popup__fields">
                         <label className="avatar">
