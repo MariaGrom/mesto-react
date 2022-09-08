@@ -3,32 +3,24 @@ import avatar from '../images/kusto.jpg';
 import api from '../utils/api';
 import Card from './Card'
 
-function Main(props){
-  const {onEditAvatar, onEditProfile, onAddPlace, onCardClick}=props
+function Main(props) {
+  const { onEditAvatar, onEditProfile, onAddPlace, onCardClick } = props
 
   // Задаем переменные состояния пользователя 
   const [userName, setUserName] = React.useState('Жак Ив Кусто');
-  const [userDescription, setUserDescription] = React.useState('Исследователь океана'); 
+  const [userDescription, setUserDescription] = React.useState('Исследователь океана');
   const [userAvatar, setUserAvatar] = React.useState(avatar);
   // Переменная состояния карточек
   const [cards, setCards] = React.useState([]);
 
 
-  // Подгружаем данные пользователя с сервера в значение состояния
+  // Подгружаем данные пользователя и карточки с сервера в функции состояний
   React.useEffect(() => {
-    api.getUserInfo()
-      .then(data => {
+    Promise.all([api.getUserInfo(), api.getAllCards()])
+      .then(([data, serverCards]) => {
         setUserName(data.name);
         setUserDescription(data.about);
         setUserAvatar(data.avatar);
-      })
-      .catch((err) => { console.log(err) })
-  }, [])
-
-  // Забираем карточки с сервера
-  React.useEffect(() => {
-    api.getAllCards()
-      .then((serverCards) => {
         setCards(serverCards);
       })
       .catch((err) => { console.log(err) })
@@ -39,7 +31,7 @@ function Main(props){
       <section className="profile">
         <div className="profile__info">
           <div className="profile__photo" onClick={onEditAvatar}>
-            <img className="profile__avatar" src={userAvatar} alt="Аватар"  />
+            <img className="profile__avatar" src={userAvatar} alt="Аватар" />
           </div>
           <div className="profile__user">
             <div className="profile__name">
@@ -56,8 +48,6 @@ function Main(props){
           {cards.map(card => <Card key={card._id} card={card} onClick={onCardClick} />)}
         </ul>
       </section>
-
-     
 
 
     </main >

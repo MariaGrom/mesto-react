@@ -9,44 +9,26 @@ import ImagePopup from './ImagePopup';
 
 function App() {
 
-    //   // Открытие попапа с Аватаром
-    //   function handleEditAvatarClick() {
-    //     const popup = document.querySelector('.popup_type_avatar')
-    //     popup.classList.add('popup_opened')
-    //   }
-
-    //   // Открытие попапа с Профилем 
-    //   function handleEditProfileClick() {
-    //     const popup = document.querySelector('.popup_type_profile')
-    //     popup.classList.add('popup_opened')
-    //   }
-
-    //   // Открытие попап с Новым Место
-    //   function handleAddPlaceClick() {
-    //     const popup = document.querySelector('.popup_type_place')
-    //     popup.classList.add('popup_opened')
-    //   }
-
     // Переменные состояния попапов
-    const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState('');
-    const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState('');
-    const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen] =React.useState('');
-
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState('');
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState('');
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState('');
+    // Переменные состояния для попапа открытия карточки 
     const [selectedCard, setSelectedCard] = React.useState({});
     const [openPopupName, setOpenPopupName] = React.useState('');
 
-    function handleEditAvatarClick () {
+    function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen('popup_opened')
     }
-    
+
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen('popup_opened')
     }
 
-    function  handleAddPlaceClick() {
+    function handleAddPlaceClick() {
         setIsAddPlacePopupOpen('popup_opened')
     }
-    
+
     const onCardClick = (card) => {
         setSelectedCard(card);
         setOpenPopupName('preview');
@@ -57,14 +39,12 @@ function App() {
         setIsEditAvatarPopupOpen('');
         setIsEditProfilePopupOpen('');
         setIsAddPlacePopupOpen('');
-        
-      };
+    };
 
     return (
         <>
             <Header />
             <Main
-                
                 onCardClick={onCardClick}
                 onEditAvatar={handleEditAvatarClick}
                 onEditProfile={handleEditProfileClick}
@@ -75,7 +55,7 @@ function App() {
                 title="Редактировать профиль"
                 textsubmit="Сохранить"
                 isOpen={isEditProfilePopupOpen}
-                onClose={()=>{
+                onClose={() => {
                     closeAllPopup()
                 }}
                 children={
@@ -101,7 +81,7 @@ function App() {
                 title="Новое место"
                 textsubmit="Создать"
                 isOpen={isAddPlacePopupOpen}
-                onClose={()=>{
+                onClose={() => {
                     closeAllPopup()
                 }}
                 children={
@@ -121,15 +101,14 @@ function App() {
                 }
             />
 
-            <ImagePopup 
-            card ={selectedCard}
-            isOpen={openPopupName === 'preview'}
-            onClose={()=>{
-                closeAllPopup();
-                setSelectedCard({});
-              }}
+            <ImagePopup
+                card={selectedCard}
+                isOpen={openPopupName === 'preview'}
+                onClose={() => {
+                    closeAllPopup();
+                    setSelectedCard({});
+                }}
             />
-
 
             <PopupWithForm
                 name="delete"
@@ -137,13 +116,12 @@ function App() {
                 textsubmit="Да"
             />
 
-
             <PopupWithForm
                 name="avatar"
                 title="Обновить аватар"
                 textsubmit="Сохранить"
                 isOpen={isEditAvatarPopupOpen}
-                onClose={()=>{
+                onClose={() => {
                     closeAllPopup()
                 }}
                 children={
@@ -157,10 +135,7 @@ function App() {
                 }
             />
             <Footer />
-
-
         </>
-
     );
 }
 
