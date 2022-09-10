@@ -35,10 +35,10 @@ function App() {
     };
 
     const closeAllPopups = () => {
-        setOpenPopupName('');
-        setIsEditAvatarPopupOpen('');
-        setIsEditProfilePopupOpen('');
-        setIsAddPlacePopupOpen('');
+        setOpenPopupName(false);
+        setIsEditAvatarPopupOpen(false);
+        setIsEditProfilePopupOpen(false);
+        setIsAddPlacePopupOpen(false);
     };
 
     return (
