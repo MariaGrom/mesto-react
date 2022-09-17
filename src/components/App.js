@@ -4,6 +4,8 @@ import Footer from './Footer';
 import Main from './Main';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import api from '../utils/api';
+import { defaultCurrentUser, CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
 
@@ -16,6 +18,17 @@ function App() {
     // Переменные состояния для попапа открытия карточки 
     const [selectedCard, setSelectedCard] = React.useState({});
     const [openPopupName, setOpenPopupName] = React.useState('');
+
+    // Переменная состояния пользователя
+    const [currentUser, setCurrentUser] = React.useState(defaultCurrentUser);
+
+    React.useEffect(() => {
+        api.getUserInfo()
+            .then((data) => {
+                setCurrentUser(data)
+            })
+            .catch((err) => { console.log(err) })
+    }, [])
 
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true)
@@ -42,7 +55,8 @@ function App() {
     };
 
     return (
-        <>
+
+        <CurrentUserContext.Provider value={currentUser}>
             <Header />
             <Main
                 onCardClick={onCardClick}
@@ -129,7 +143,8 @@ function App() {
                 }
             />
             <Footer />
-        </>
+        </CurrentUserContext.Provider>
+
     );
 }
 

@@ -1,26 +1,22 @@
 import React from 'react';
-import avatar from '../images/kusto.jpg';
 import api from '../utils/api';
 import Card from './Card'
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
 function Main(props) {
   const { onEditAvatar, onEditProfile, onAddPlace, onCardClick } = props
 
-  // Задаем переменные состояния пользователя 
-  const [userName, setUserName] = React.useState('Жак Ив Кусто');
-  const [userDescription, setUserDescription] = React.useState('Исследователь океана');
-  const [userAvatar, setUserAvatar] = React.useState(avatar);
+  // Подписываемся на контекст CurrentUserContext
+const currentUser = React.useContext(CurrentUserContext);
+
   // Переменная состояния карточек
   const [cards, setCards] = React.useState([]);
 
 
   // Подгружаем данные пользователя и карточки с сервера в функции состояний
   React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getAllCards()])
-      .then(([data, serverCards]) => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
+    api.getAllCards()
+      .then((serverCards) => {
         setCards(serverCards);
       })
       .catch((err) => { console.log(err) })
@@ -31,14 +27,14 @@ function Main(props) {
       <section className="profile">
         <div className="profile__info">
           <div className="profile__photo" onClick={onEditAvatar}>
-            <img className="profile__avatar" src={userAvatar} alt="Аватар" />
+            <img className="profile__avatar" src={currentUser.avatar} alt="Аватар" />
           </div>
           <div className="profile__user">
             <div className="profile__name">
-              <h1 className="profile__title">{userName}</h1>
+              <h1 className="profile__title">{currentUser.name}</h1>
               <button className="profile__edit-button" onClick={onEditProfile}></button>
             </div>
-            <p className="profile__subtitle">{userDescription}</p>
+            <p className="profile__subtitle">{currentUser.about}</p>
           </div>
         </div>
         <button className="profile__add-button" onClick={onAddPlace}></button>
