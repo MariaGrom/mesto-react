@@ -23,6 +23,7 @@ function Main(props) {
   }, [])
 
 
+  // Функция постановки лайков карточке
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -33,6 +34,7 @@ function Main(props) {
       });
   }
 
+  // Функция удаления карточки
   function handleCardDelete (card) {
 
   }

@@ -27,21 +27,34 @@ class Api {
   // 3. Постановка лайка
   changeLikeCardStatus (id, isLiked) {
     if (isLiked) {
-      fetch(`${this._url}/cards/${id}/likes`,
+     return fetch(`${this._url}/cards/${id}/likes`,
         {
           method: 'PUT',
           headers: this._headers,
         })
-        .then(console.log('успех - поставил лайк'))
+        .then(this._handleResponce)
     } else {
-      fetch(`${this._url}/cards/${id}/likes`,
+      return fetch(`${this._url}/cards/${id}/likes`,
         {
           method: 'DELETE',
           headers: this._headers,
         })
-        .then(console.log('успех - снял лайк'))
+        .then(this._handleResponce)
     }
   }
+
+  // 4. Удаление карточки
+
+  // 5. Изменение полей пользователя
+  setUserInfo({ name, about }) {
+    return fetch(`${this._url}/users/me`,
+      {
+        method: 'PATCH',
+        headers: this._headers,
+        body: JSON.stringify({ name, about })
+      })
+      .then(this._handleResponce)
+  } 
 
 
 }

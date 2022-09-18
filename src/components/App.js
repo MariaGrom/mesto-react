@@ -4,6 +4,7 @@ import Footer from './Footer';
 import Main from './Main';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
 import api from '../utils/api';
 import { defaultCurrentUser, CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -26,6 +27,7 @@ function App() {
         api.getUserInfo()
             .then((data) => {
                 setCurrentUser(data)
+                
             })
             .catch((err) => { console.log(err) })
     }, [])
@@ -54,6 +56,17 @@ function App() {
         setIsAddPlacePopupOpen(false);
     };
 
+    // Изменение данных профиля
+    function handleUpdateUser(userData) {
+        api.setUserInfo(userData)
+            .then((userDataServer) => {
+                setCurrentUser(userDataServer)
+            })
+            .catch((err) => { console.log(err) })
+            .finally(() =>
+                closeAllPopups())
+    }
+
     return (
 
         <CurrentUserContext.Provider value={currentUser}>
@@ -64,28 +77,12 @@ function App() {
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
             />
-            <PopupWithForm
-                name="profile"
-                title="Редактировать профиль"
-                textsubmit="Сохранить"
+            <EditProfilePopup
+
                 isOpen={isEditProfilePopupOpen}
                 onClose={closeAllPopups}
-                children={
-                    <fieldset className="popup__fields">
-                        <label className="name">
-                            <input type="text" name="name" id="name__input" placeholder="Имя"
-                                className="popup__text popup__text_type_name popup__input" minLength="2" maxLength="40"
-                                required />
-                            <span className="popup__input-error name__input-error"></span>
-                        </label>
-                        <label className="job">
-                            <input type="text" name="about" id="job__input" placeholder="О себе"
-                                className="popup__text popup__text_type_job popup__input" minLength="2" maxLength="200"
-                                required />
-                            <span className="popup__input-error job__input-error"></span>
-                        </label>
-                    </fieldset>
-                }
+                onUpdateUser={handleUpdateUser}
+
             />
 
             <PopupWithForm
@@ -94,6 +91,7 @@ function App() {
                 textsubmit="Создать"
                 isOpen={isAddPlacePopupOpen}
                 onClose={closeAllPopups}
+                onUpdateUser={handleUpdateUser}
                 children={
                     <fieldset className="popup__fields">
                         <label className="place">
