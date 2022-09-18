@@ -1,13 +1,13 @@
 import React from 'react';
 import api from '../utils/api';
 import Card from './Card'
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main(props) {
   const { onEditAvatar, onEditProfile, onAddPlace, onCardClick } = props
 
   // Подписываемся на контекст CurrentUserContext
-const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = React.useContext(CurrentUserContext);
 
   // Переменная состояния карточек
   const [cards, setCards] = React.useState([]);
@@ -21,6 +21,22 @@ const currentUser = React.useContext(CurrentUserContext);
       })
       .catch((err) => { console.log(err) })
   }, [])
+
+
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((serverCards) => serverCards.map((c) => c._id === card._id ? newCard : c));
+      });
+  }
+
+  function handleCardDelete (card) {
+
+  }
+
 
   return (
     <main>
@@ -41,7 +57,7 @@ const currentUser = React.useContext(CurrentUserContext);
       </section>
       <section className="elements">
         <ul className="elements__items">
-          {cards.map(card => (<Card key={card._id} card={card} onClick={onCardClick} />))}
+          {cards.map(card => (<Card key={card._id} card={card} onClick={onCardClick} onCardLike={handleCardLike} />))}
         </ul>
       </section>
 

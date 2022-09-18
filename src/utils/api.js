@@ -24,6 +24,26 @@ class Api {
       .then(this._handleResponce)
   }
 
+  // 3. Постановка лайка
+  changeLikeCardStatus (id, isLiked) {
+    if (isLiked) {
+      fetch(`${this._url}/cards/${id}/likes`,
+        {
+          method: 'PUT',
+          headers: this._headers,
+        })
+        .then(console.log('успех - поставил лайк'))
+    } else {
+      fetch(`${this._url}/cards/${id}/likes`,
+        {
+          method: 'DELETE',
+          headers: this._headers,
+        })
+        .then(console.log('успех - снял лайк'))
+    }
+  }
+
+
 }
 
 const api = new Api({
