@@ -24,7 +24,7 @@ class Api {
       .then(this._handleResponce)
   }
 
-  // 3. Постановка лайка
+  // 3. Постановка/снятие лайка
   changeLikeCardStatus (id, isLiked) {
     if (isLiked) {
      return fetch(`${this._url}/cards/${id}/likes`,
@@ -44,6 +44,14 @@ class Api {
   }
 
   // 4. Удаление карточки
+  deleteCard(id){
+    return fetch(`${this._url}/cards/${id}`,
+    {
+      method: 'DELETE',
+      headers: this._headers,
+    })
+    .then(this._handleResponce)
+  }
 
   // 5. Изменение полей пользователя
   setUserInfo({ name, about }) {
@@ -55,6 +63,17 @@ class Api {
       })
       .then(this._handleResponce)
   } 
+
+  // 6. Изменение аватара пользователя
+  setUseravatar({ avatar }) {
+    return fetch(`${this._url}/users/me/avatar`,
+      {
+        method: 'PATCH',
+        headers: this._headers,
+        body: JSON.stringify({ avatar })
+      })
+      .then(this._handleResponce)
+  }
 
 
 }

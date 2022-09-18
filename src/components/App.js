@@ -5,6 +5,7 @@ import Main from './Main';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 import api from '../utils/api';
 import { defaultCurrentUser, CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -27,22 +28,22 @@ function App() {
         api.getUserInfo()
             .then((data) => {
                 setCurrentUser(data)
-                
+
             })
             .catch((err) => { console.log(err) })
-    }, [])
+    }, []);
 
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true)
-    }
+    };
 
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen(true)
-    }
+    };
 
     function handleAddPlaceClick() {
         setIsAddPlacePopupOpen(true)
-    }
+    };
 
     const onCardClick = (card) => {
         setSelectedCard(card);
@@ -61,11 +62,23 @@ function App() {
         api.setUserInfo(userData)
             .then((userDataServer) => {
                 setCurrentUser(userDataServer)
+                closeAllPopups()
             })
             .catch((err) => { console.log(err) })
-            .finally(() =>
-                closeAllPopups())
-    }
+    };
+
+    // Изменение аватара профиля
+    function handleUpdateAvatar(userAvatar) {
+        api.setUseravatar(userAvatar)
+            .then((userAvatarServer) => {
+                setCurrentUser(userAvatarServer)
+                closeAllPopups()
+            })
+            .catch((err) => { console.log(err) })
+    };
+
+
+
 
     return (
 
@@ -82,7 +95,6 @@ function App() {
                 isOpen={isEditProfilePopupOpen}
                 onClose={closeAllPopups}
                 onUpdateUser={handleUpdateUser}
-
             />
 
             <PopupWithForm
@@ -91,11 +103,14 @@ function App() {
                 textsubmit="Создать"
                 isOpen={isAddPlacePopupOpen}
                 onClose={closeAllPopups}
-                onUpdateUser={handleUpdateUser}
+                //onUpdateUser={handleUpdateUser}
                 children={
                     <fieldset className="popup__fields">
                         <label className="place">
-                            <input type="text" name="name" id="place__input" placeholder="Название"
+                            <input type="text"
+                                name="name"
+                                id="place__input"
+                                placeholder="Название"
                                 className="popup__text popup__text_type_name popup__input" minLength="2" maxLength="30"
                                 required />
                             <span className="popup__input-error place__input-error"></span>
@@ -124,21 +139,12 @@ function App() {
                 textsubmit="Да"
             />
 
-            <PopupWithForm
-                name="avatar"
-                title="Обновить аватар"
-                textsubmit="Сохранить"
+            <EditAvatarPopup
+
                 isOpen={isEditAvatarPopupOpen}
                 onClose={closeAllPopups}
-                children={
-                    <fieldset className="popup__fields">
-                        <label className="avatar">
-                            <input type="url" name="avatar" id="avatar__input" placeholder="Ссылка на картинку"
-                                className="popup__text popup__text_type_avatar popup__input" required />
-                            <span className="popup__input-error avatar__input-error"></span>
-                        </label>
-                    </fieldset>
-                }
+                onUpdateAvatar={handleUpdateAvatar}
+
             />
             <Footer />
         </CurrentUserContext.Provider>
