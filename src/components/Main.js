@@ -35,8 +35,11 @@ function Main(props) {
   }
 
   // Функция удаления карточки
-  function handleCardDelete (card) {
-
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+      .then((deleteCard) => {
+        setCards((serverCards) => serverCards.filter((c) => c._id !== card._id))
+      })
   }
 
 
@@ -59,7 +62,7 @@ function Main(props) {
       </section>
       <section className="elements">
         <ul className="elements__items">
-          {cards.map(card => (<Card key={card._id} card={card} onClick={onCardClick} onCardLike={handleCardLike} />))}
+          {cards.map(card => (<Card key={card._id} card={card} onClick={onCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />))}
         </ul>
       </section>
 
