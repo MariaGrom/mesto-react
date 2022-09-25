@@ -25,9 +25,9 @@ class Api {
   }
 
   // 3. Постановка/снятие лайка
-  changeLikeCardStatus (id, isLiked) {
+  changeLikeCardStatus(id, isLiked) {
     if (isLiked) {
-     return fetch(`${this._url}/cards/${id}/likes`,
+      return fetch(`${this._url}/cards/${id}/likes`,
         {
           method: 'PUT',
           headers: this._headers,
@@ -44,13 +44,13 @@ class Api {
   }
 
   // 4. Удаление карточки
-  deleteCard(id){
+  deleteCard(id) {
     return fetch(`${this._url}/cards/${id}`,
-    {
-      method: 'DELETE',
-      headers: this._headers,
-    })
-    .then(this._handleResponce)
+      {
+        method: 'DELETE',
+        headers: this._headers,
+      })
+      .then(this._handleResponce)
   }
 
   // 5. Изменение полей пользователя
@@ -62,7 +62,7 @@ class Api {
         body: JSON.stringify({ name, about })
       })
       .then(this._handleResponce)
-  } 
+  }
 
   // 6. Изменение аватара пользователя
   setUseravatar({ avatar }) {
@@ -74,6 +74,18 @@ class Api {
       })
       .then(this._handleResponce)
   }
+
+  // 7. Добавление новой карточки 
+  createNewCard({ name, link }) {
+    return fetch(`${this._url}/cards`,
+      {
+        method: 'POST',
+        headers: this._headers,
+        body: JSON.stringify({ name, link })
+      })
+      .then(this._handleResponce)
+  }
+
 
 
 }

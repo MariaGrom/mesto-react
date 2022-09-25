@@ -6,6 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api';
 import { defaultCurrentUser, CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -20,6 +21,9 @@ function App() {
     // Переменные состояния для попапа открытия карточки 
     const [selectedCard, setSelectedCard] = React.useState({});
     const [openPopupName, setOpenPopupName] = React.useState('');
+    // Переменная состояния карточек
+    const [cards, setCards] = React.useState([]);
+
 
     // Переменная состояния пользователя
     const [currentUser, setCurrentUser] = React.useState(defaultCurrentUser);
@@ -32,6 +36,35 @@ function App() {
             })
             .catch((err) => { console.log(err) })
     }, []);
+
+    // Подгружаем данные пользователя и карточки с сервера в функции состояний
+    React.useEffect(() => {
+        api.getAllCards()
+            .then((serverCards) => {
+                setCards(serverCards);
+            })
+            .catch((err) => { console.log(err) })
+    }, [])
+
+    // Функция постановки лайков карточке
+    function handleCardLike(card) {
+        // Снова проверяем, есть ли уже лайк на этой карточке
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        // Отправляем запрос в API и получаем обновлённые данные карточки
+        api.changeLikeCardStatus(card._id, !isLiked)
+            .then((newCard) => {
+                setCards((serverCards) => serverCards.map((c) => c._id === card._id ? newCard : c));
+            });
+    }
+
+    // Функция удаления карточки
+    function handleCardDelete(card) {
+        api.deleteCard(card._id)
+            .then((deleteCard) => {
+                setCards((serverCards) => serverCards.filter((c) => c._id !== card._id))
+            })
+    }
+
 
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true)
@@ -77,7 +110,18 @@ function App() {
             .catch((err) => { console.log(err) })
     };
 
+    // Добавление новой карточки
+    function handleAddPlaceSubmit(card) {
+        api.createNewCard(card)
+            .then((newCard) => {
+                setCards([newCard, ...cards]);
+                closeAllPopups();
+            })
+            .catch((err) => {
+                console.log(err)
+            })
 
+    }
 
 
     return (
@@ -89,6 +133,9 @@ function App() {
                 onEditAvatar={handleEditAvatarClick}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+                cards={cards}
             />
             <EditProfilePopup
 
@@ -97,31 +144,12 @@ function App() {
                 onUpdateUser={handleUpdateUser}
             />
 
-            <PopupWithForm
-                name="place"
-                title="Новое место"
-                textsubmit="Создать"
+            <AddPlacePopup
+
                 isOpen={isAddPlacePopupOpen}
                 onClose={closeAllPopups}
-                //onUpdateUser={handleUpdateUser}
-                children={
-                    <fieldset className="popup__fields">
-                        <label className="place">
-                            <input type="text"
-                                name="name"
-                                id="place__input"
-                                placeholder="Название"
-                                className="popup__text popup__text_type_name popup__input" minLength="2" maxLength="30"
-                                required />
-                            <span className="popup__input-error place__input-error"></span>
-                        </label>
-                        <label className="link">
-                            <input type="url" name="link" id="link__input" placeholder="Ссылка на картинку"
-                                className="popup__text popup__text_type_link popup__input" required />
-                            <span className="popup__input-error link__input-error"></span>
-                        </label>
-                    </fieldset>
-                }
+                onAddPlace={handleAddPlaceSubmit}
+
             />
 
             <ImagePopup

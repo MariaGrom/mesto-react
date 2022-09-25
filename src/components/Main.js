@@ -1,46 +1,12 @@
 import React from 'react';
-import api from '../utils/api';
 import Card from './Card'
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main(props) {
-  const { onEditAvatar, onEditProfile, onAddPlace, onCardClick } = props
+  const { onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardDelete, onCardLike, cards } = props
 
   // Подписываемся на контекст CurrentUserContext
   const currentUser = React.useContext(CurrentUserContext);
-
-  // Переменная состояния карточек
-  const [cards, setCards] = React.useState([]);
-
-
-  // Подгружаем данные пользователя и карточки с сервера в функции состояний
-  React.useEffect(() => {
-    api.getAllCards()
-      .then((serverCards) => {
-        setCards(serverCards);
-      })
-      .catch((err) => { console.log(err) })
-  }, [])
-
-
-  // Функция постановки лайков карточке
-  function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((serverCards) => serverCards.map((c) => c._id === card._id ? newCard : c));
-      });
-  }
-
-  // Функция удаления карточки
-  function handleCardDelete(card) {
-    api.deleteCard(card._id)
-      .then((deleteCard) => {
-        setCards((serverCards) => serverCards.filter((c) => c._id !== card._id))
-      })
-  }
 
 
   return (
@@ -62,10 +28,9 @@ function Main(props) {
       </section>
       <section className="elements">
         <ul className="elements__items">
-          {cards.map(card => (<Card key={card._id} card={card} onClick={onCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />))}
+          {cards.map(card => (<Card key={card._id} card={card} onClick={onCardClick} onCardLike={onCardLike} onCardDelete={onCardDelete} />))}
         </ul>
       </section>
-
 
     </main >
   )

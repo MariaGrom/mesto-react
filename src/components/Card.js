@@ -4,6 +4,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 function Card(props) {
   const { card, onClick, onCardLike, onCardDelete } = props
 
+
+
   // Подписываемся на контекст CurrentUserContext
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -22,17 +24,17 @@ function Card(props) {
     `elements__like ${isLiked ? 'elements__like_active' : ''}`
   );
 
-  function handleLikeClick (){
+  function handleLikeClick() {
     onCardLike(card)
   }
-  
+
   function handleDeleteClick() {
     onCardDelete(card)
   }
 
   return (
     <li className="elements__item">
-      <img className="elements__photo" src={card.link} alt={card.name} onClick={() => onClick(card)}  />
+      <img className="elements__photo" src={card.link} alt={card.name} onClick={() => onClick(card)} />
       <div className="elements__description">
         <h2 className="elements__title"> {card.name} </h2>
         <div className="elements__like-container">
