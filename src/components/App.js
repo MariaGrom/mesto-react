@@ -20,7 +20,7 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
     // Переменные состояния для попапа открытия карточки 
     const [selectedCard, setSelectedCard] = React.useState({});
-    const [openPopupName, setOpenPopupName] = React.useState('');
+    const [isOpenPopupName, setIsOpenPopupName] = React.useState(Boolean);
     // Переменная состояния карточек
     const [cards, setCards] = React.useState([]);
 
@@ -40,8 +40,8 @@ function App() {
     // Подгружаем данные пользователя и карточки с сервера в функции состояний
     React.useEffect(() => {
         api.getAllCards()
-            .then((serverCards) => {
-                setCards(serverCards);
+            .then((cards) => {
+                setCards(cards);
             })
             .catch((err) => { console.log(err) })
     }, [])
@@ -53,16 +53,18 @@ function App() {
         // Отправляем запрос в API и получаем обновлённые данные карточки
         api.changeLikeCardStatus(card._id, !isLiked)
             .then((newCard) => {
-                setCards((serverCards) => serverCards.map((c) => c._id === card._id ? newCard : c));
-            });
+                setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
+            })
+            .catch((err) => { console.log(err) })
     }
 
     // Функция удаления карточки
     function handleCardDelete(card) {
         api.deleteCard(card._id)
-            .then((deleteCard) => {
-                setCards((serverCards) => serverCards.filter((c) => c._id !== card._id))
+            .then((deletedCard) => {
+                setCards((cards) => cards.filter((c) => c._id !== card._id))
             })
+            .catch((err) => { console.log(err) })
     }
 
 
@@ -80,11 +82,11 @@ function App() {
 
     const onCardClick = (card) => {
         setSelectedCard(card);
-        setOpenPopupName('preview');
+        setIsOpenPopupName('preview');
     };
 
     const closeAllPopups = () => {
-        setOpenPopupName(false);
+        setIsOpenPopupName(false);
         setIsEditAvatarPopupOpen(false);
         setIsEditProfilePopupOpen(false);
         setIsAddPlacePopupOpen(false);
@@ -154,7 +156,7 @@ function App() {
 
             <ImagePopup
                 card={selectedCard}
-                isOpen={openPopupName === 'preview'}
+                isOpen={isOpenPopupName === 'preview'}
                 onClose={() => {
                     closeAllPopups();
                     setSelectedCard({});
@@ -164,7 +166,7 @@ function App() {
             <PopupWithForm
                 name="delete"
                 title="Вы уверены?"
-                textsubmit="Да"
+                textSubmit="Да"
             />
 
             <EditAvatarPopup
