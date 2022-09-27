@@ -7,7 +7,7 @@ import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import api from '../utils/api';
+import api from '../utils/Api';
 import { defaultCurrentUser, CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
@@ -20,7 +20,7 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
     // Переменные состояния для попапа открытия карточки 
     const [selectedCard, setSelectedCard] = React.useState({});
-    const [isOpenPopupName, setIsOpenPopupName] = React.useState(Boolean);
+    const [isOpenPopupName, setIsOpenPopupName] = React.useState(false);
     // Переменная состояния карточек
     const [cards, setCards] = React.useState([]);
 
@@ -82,7 +82,7 @@ function App() {
 
     const onCardClick = (card) => {
         setSelectedCard(card);
-        setIsOpenPopupName('preview');
+        setIsOpenPopupName(true);
     };
 
     const closeAllPopups = () => {
@@ -104,7 +104,7 @@ function App() {
 
     // Изменение аватара профиля
     function handleUpdateAvatar(userAvatar) {
-        api.setUseravatar(userAvatar)
+        api.setUserAvatar(userAvatar)
             .then((userAvatarServer) => {
                 setCurrentUser(userAvatarServer)
                 closeAllPopups()
@@ -156,7 +156,7 @@ function App() {
 
             <ImagePopup
                 card={selectedCard}
-                isOpen={isOpenPopupName === 'preview'}
+                isOpen={isOpenPopupName}
                 onClose={() => {
                     closeAllPopups();
                     setSelectedCard({});
