@@ -85,9 +85,6 @@ class Api {
       })
       .then(this._handleResponce)
   }
-
-
-
 }
 
 const api = new Api({
