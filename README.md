@@ -23,3 +23,4 @@ https://mariagrom.github.io/mesto-react/
 5. Работа с DOM-элементами; 
 6. Запрос с сервера через API;
 7. Хуки React.
+<img width="1164" alt="Снимок экрана 2023-04-12 в 20 40 46" src="https://user-images.githubusercontent.com/102763756/231539746-55298bb0-5d62-4b25-b5fc-789da2eb5ae6.png">
